@@ -10,7 +10,7 @@ https://projectmesto.gitnikolas.nomoredomainsicu.ru
 
 ## Ссылки на проект
 
-IP-адрес 51.250.27.115
+IP 51.250.27.115
 
 Frontend https://projectmesto.gitnikolas.nomoredomainsicu.ru
 
