@@ -5,7 +5,6 @@ require('dotenv').config();
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const { SALT_ROUNDS = 10 } = process.env;
 const { JWT_SECRET = 'testSecretCode' } = process.env;
 
 const mongoose = require('mongoose');
@@ -55,7 +54,7 @@ const postUser = (req, res, next) => {
     name, about, avatar, email, password,
   } = req.body;
 
-  return bcrypt.hash(password, SALT_ROUNDS)
+  return bcrypt.hash(password, 10)
     .then((hash) => userModel.create({
       name, about, avatar, email, password: hash,
     }))
