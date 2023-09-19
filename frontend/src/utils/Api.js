@@ -1,5 +1,3 @@
-import { jwt } from './constants';
-
 class Api {
   constructor(options) {
     this.options = options;
@@ -19,16 +17,14 @@ class Api {
   getInitialCards() {
     return fetch(`${this._url}/cards`, {
       method: 'GET',
-      headers: this._headers,
+      headers: getHeaders(),
     })
     .then(this._handleResponse)
   }
 
   getUserInformation() {
     return fetch(`${this._url}/users/me`, {
-      headers: {
-        authorization: this._authorization,
-      }
+      headers: getHeaders()
     })
     .then(this._handleResponse)
   }
@@ -36,7 +32,7 @@ class Api {
   setInitialCard(data) {
     return fetch(`${this._url}/cards`, {
       method: 'POST',
-      headers: this._headers,
+      headers: getHeaders(),
       body: JSON.stringify({
         name: data.name,
         link: data.link,
@@ -48,7 +44,7 @@ class Api {
   setUserInformation(data) {
     return fetch(`${this._url}/users/me`, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: getHeaders(),
       body: JSON.stringify({
         name: data.name,
         about: data.about,
@@ -61,7 +57,7 @@ class Api {
   setUserAvatar(data) {
     return fetch(`${this._url}/users/me/avatar`, {
       method: 'PATCH',
-      headers: this._headers,
+      headers: getHeaders(),
       body: JSON.stringify({
         avatar: data.avatar,
       })
@@ -72,9 +68,7 @@ class Api {
   handleLike(cardId) {
     return fetch(`${this._url}/cards/${cardId}/likes `, {
       method: 'PUT',
-      headers: {
-        authorization: this._authorization,
-      }
+      headers: getHeaders()
     })
     .then(this._handleResponse)
   }
@@ -82,9 +76,7 @@ class Api {
   deleteLike(cardId) {
     return fetch(`${this._url}/cards/${cardId}/likes `, {
       method: 'DELETE',
-      headers: {
-        authorization: this._authorization,
-      }
+      headers: getHeaders()
     })
     .then(this._handleResponse)
   }
@@ -92,20 +84,23 @@ class Api {
   deleteCard(cardId){
     return fetch(`${this._url}/cards/${cardId}`, {
       method: 'DELETE',
-      headers: {
-        authorization: this._authorization,
-      },
+      headers: getHeaders(),
     })
     .then(this._handleResponse)
   }
 }
 
+const getHeaders = () => {
+  const token = localStorage.getItem('jwt');
+  return {
+    authorization: `Bearer ${token}`,
+    'Content-Type': 'application/json'
+  }
+}
+
 const api = new Api({
   baseUrl: 'https://api.projectMesto.gitNik.nomoredomainsicu.ru',
-  headers: {
-    authorization: `Bearer ${jwt}`,
-    'Content-Type': 'application/json'
-  },
+  headers: getHeaders(),
 });
 
 export default api;

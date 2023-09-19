@@ -9,7 +9,11 @@ export function register(password, email) {
     body: JSON.stringify({ password, email })
   })
   .then( (res) => {
-    return res.json();
+    if(res.ok){
+      return res.json();
+    } else {
+      throw new Error(`Произошла ошибка регистрации: ${res.status} ${res.statusText}`)
+    }
   })
 }
 

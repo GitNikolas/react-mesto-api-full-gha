@@ -64,19 +64,22 @@ function App() {
   }, [])
 
   React.useEffect(() => {
-    Promise.all([api.getInitialCards(), api.getUserInformation()])
-    .then(([dataCard, dataUser]) => {
-        setCards(dataCard);
-        setCurrentUser(dataUser);
-    })
-    .catch((err) => console.error(`Ошибка: ${err}`))
+    const jwt = localStorage.getItem('jwt');
+    if(jwt){
+      Promise.all([api.getInitialCards(), api.getUserInformation()])
+      .then(([dataCard, dataUser]) => {
+          setCards(dataCard);
+          setCurrentUser(dataUser);
+      })
+      .catch((err) => console.error(`Ошибка: ${err}`))
+    }
   }, [loggedIn])
 
   function handleRegister ({ password, email }){
     setIsLoading(true);
+    setInfoTooltipPopupOpen(true);
     return register(password, email)
     .then( (res) => {
-      setInfoTooltipPopupOpen(true);
       if(res.error){
         setSuccessRegistration(false);
       }else{
@@ -85,6 +88,7 @@ function App() {
       }
     })
     .catch( (err) => {
+      setSuccessRegistration(false);
       console.error(err);
     })
     .finally(() => {setIsLoading(false)});
@@ -99,7 +103,10 @@ function App() {
         setEmail(email);
         setloggedIn(true);
         navigate('/');
+        return;
       }
+      setSuccessRegistration(false);
+      setInfoTooltipPopupOpen(true);
     })
     .catch( (err) => {
       console.error(err);
