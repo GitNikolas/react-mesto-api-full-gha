@@ -24,11 +24,11 @@ mongoose.connect(DB_URL, {
 
 const app = express();
 
+app.use(cors());
+
 app.use(helmet());
 
 app.use(limiter);
-
-app.use(cors());
 
 app.use(express.json());
 
